@@ -33,7 +33,11 @@ void startClock()
 {
   // Fast PWM Mode with OCRA top
   // http://arduino.cc/en/Tutorial/SecretsOfArduinoPWM
+  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
   pinMode(10, OUTPUT); // Output A from Timer2 (OC2A)
+  #else
+  pinMode(11, OUTPUT); // Output A from Timer2 (OC2A)
+  #endif
   // TCCR2A explained in pg. 187
   // COM2A0=1: Toggle OC2A on Compare Match
   // WGM20,21,22=1: Mode 7, Fast PWM, TOP=OCR2A
