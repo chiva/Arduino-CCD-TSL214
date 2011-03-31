@@ -15,36 +15,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Pin mappings:
-// http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1241206933
-// http://spreadsheets.google.com/ccc?key=roX9D5pGUrS4muSBJysz1QQ#gid=0
-// http://spreadsheets.google.com/pub?key=0AtfNMvfWhA_ccnRId19SNmVWTDE0MEtTOV9HOEdQa0E&gid=0
+#define CLK 3      // Clock source pin
+#define SI 8       // 'Start integration' pin
+#define INT_TIME 8 // Integration time (around 1÷8)
+#define PIXELS 64  // Number of pixels
 
-void setup()
-{
-  startClock();
+void setup(){
+  pinMode(CLK, OUTPUT);
+  pinMode(SI, OUTPUT);
 }
 
 void loop(){
-
-}
-
-void startClock()
-{
-  // Fast PWM Mode with OCRA top
-  // http://arduino.cc/en/Tutorial/SecretsOfArduinoPWM
-  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-  pinMode(10, OUTPUT); // Output A from Timer2 (OC2A)
-  #else
-  pinMode(11, OUTPUT); // Output A from Timer2 (OC2A)
-  #endif
-  // TCCR2A explained in pg. 187
-  // COM2A0=1: Toggle OC2A on Compare Match
-  // WGM20,21,22=1: Mode 7, Fast PWM, TOP=OCR2A
-  TCCR2A = _BV(COM2A0) | _BV(WGM21) | _BV(WGM20);
-  // TCCR2B explained in pg. 190
-  // CS20=1: No prescaler
-  TCCR2B = _BV(WGM22) | _BV(CS20);
-  // Fa = 16MHz/prescaler/(OCR2A+1)/2 = 0,5 MHz
-  OCR2A = 15;
+  unsigned long startTime = millis();
+  digitalWrite(SI, HIGH);
+  for (int i=0;i<=PIXELS;i++){
+    digitalWrite(CLK, HIGH);
+    delayMicroseconds(2);
+    digitalWrite(CLK, LOW);
+    delayMicroseconds(2);
+    if (i==1) digitalWrite(SI, LOW);
+  }
+  while (millis() - startTime < INT_TIME);
 }
