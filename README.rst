@@ -1,5 +1,7 @@
-Arduino CCD TSL214 .. image:: http://stillmaintained.com/chiva/Arduino-CCD-TSL214.png
+Arduino CCD TSL214 |status|
 ===============
+
+.. |STATUS| image:: http://stillmaintained.com/chiva/Arduino-CCD-TSL214.png
 
 Interfacing a TSL214_ linear CCD with an Arduino.
 
